@@ -50,8 +50,14 @@ module.exports = function(grunt) {
 
       assets: {
         // copy all the asset files that are left
-        files: ['assets/**/*', '!assets/sass/**/*', '!assets/js/**/*'],
+        files: ['assets/**/*', '!assets/sass/**/*', '!assets/js/**/*', '!assets/sketch/**/*'],
         tasks: ['copy:assets', 'copy:production_assets']
+      },
+
+      sketch: {
+        // watch for changes on sketch files
+        files: 'assets/sketch/**/*',
+        tasks: ['sketch_export']
       },
 
       grunticon: {
@@ -245,6 +251,28 @@ module.exports = function(grunt) {
         cwd: 'public/production/',
         src: '**'
       }
+    },
+
+
+  // --------------------------------------------------------------------------------- \\
+
+    sketch_export: {
+      options: {
+        type: 'artboards',
+        items: [
+          'logo'
+        ],
+        scales: [
+          1.0
+        ],
+        formats: [
+          'svg'
+        ]
+      },
+      files: {
+        src: 'assets/sketch/assets.sketch',
+        dest: 'assets/icons/svg'
+      }
     }
   });
 
@@ -262,6 +290,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-grunticon');
   grunt.loadNpmTasks('grunt-aws');
+  grunt.loadNpmTasks('grunt-sketch');
 
   // Default task to be run.
   grunt.registerTask('default', ['clean:all', 'assemble', 'sass', 'concat', 'autoprefixer', 'copy']);
